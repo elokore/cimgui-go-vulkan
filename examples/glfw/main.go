@@ -1,41 +1,38 @@
 package main
 
 import (
-	"fmt"
 	"runtime"
 
 	"github.com/AllenDang/cimgui-go/backend"
-	"github.com/AllenDang/cimgui-go/backend/glfwbackend"
-	"github.com/AllenDang/cimgui-go/examples/common"
-	"github.com/AllenDang/cimgui-go/imgui"
-	_ "github.com/AllenDang/cimgui-go/impl/glfw"
+	glfwvulkanbackend "github.com/AllenDang/cimgui-go/backend/glfwvulkan-backend"
 )
 
-var currentBackend backend.Backend[glfwbackend.GLFWWindowFlags]
+var currentBackend backend.Backend[glfwvulkanbackend.GLFWWindowFlags]
 
 func init() {
 	runtime.LockOSThread()
 }
 
 func main() {
-	common.Initialize()
-	currentBackend, _ = backend.CreateBackend(glfwbackend.NewGLFWBackend())
-	currentBackend.SetAfterCreateContextHook(common.AfterCreateContext)
-	currentBackend.SetBeforeDestroyContextHook(common.BeforeDestroyContext)
+	runApplication()
+	// common.Initialize()
+	// currentBackend, _ = backend.CreateBackend(glfwbackend.NewGLFWBackend())
+	// currentBackend.SetAfterCreateContextHook(common.AfterCreateContext)
+	// currentBackend.SetBeforeDestroyContextHook(common.BeforeDestroyContext)
 
-	currentBackend.SetBgColor(imgui.NewVec4(0.45, 0.55, 0.6, 1.0))
+	// currentBackend.SetBgColor(imgui.NewVec4(0.45, 0.55, 0.6, 1.0))
 
-	currentBackend.CreateWindow("Hello from cimgui-go", 1200, 900)
+	// currentBackend.CreateWindow("Hello from cimgui-go", 1200, 900)
 
-	currentBackend.SetDropCallback(func(p []string) {
-		fmt.Printf("drop triggered: %v", p)
-	})
+	// currentBackend.SetDropCallback(func(p []string) {
+	// 	fmt.Printf("drop triggered: %v", p)
+	// })
 
-	currentBackend.SetCloseCallback(func() {
-		fmt.Println("window is closing")
-	})
+	// currentBackend.SetCloseCallback(func() {
+	// 	fmt.Println("window is closing")
+	// })
 
-	currentBackend.SetIcons(common.Image())
+	// currentBackend.SetIcons(common.Image())
 
-	currentBackend.Run(common.Loop)
+	// currentBackend.Run(common.Loop)
 }
