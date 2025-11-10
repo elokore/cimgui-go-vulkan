@@ -1,0 +1,11 @@
+Application
+2025/11/10 10:47:12 Running in windowed mode
+2025/11/10 10:47:12 Creating windowed mode: 800x600
+Created window
+2025/11/10 10:47:12 vulkan: enabling 2 instance extensions
+2025/11/10 10:47:12 vulkan: debug mode is off, not using validation layers
+2025/11/10 10:47:12 vulkan: enabling 1 device extensions
+Platform
+2025/11/10 10:47:12 Initialized base with &{Width:800 Height:600 Format:50} swapchain, 60 FPS
+Created
+2025/11/10 10:47:22 Bye!

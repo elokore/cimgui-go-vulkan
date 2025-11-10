@@ -1,4 +1,4 @@
-#if defined(CIMGUI_GO_USE_GLFW)
+//#if defined(CIMGUI_GO_USE_GLFW)
 #define GL_SILENCE_DEPRECATION
 #define CIMGUI_USE_GLFW
 #define CIMGUI_USE_OPENGL3

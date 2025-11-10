@@ -1,18 +1,23 @@
-#if defined(CIMGUI_GO_USE_GLFW)
 #define GL_SILENCE_DEPRECATION
 #define CIMGUI_USE_GLFW
 #define CIMGUI_USE_VULKAN
 
-#include "glfw_backend.h"
-#include "../../cwrappers/cimgui.h"
-#include "../../cwrappers/cimgui_impl.h"
-#include "../../thirdparty/glfw/include/GLFW/glfw3.h" // Will drag system OpenGL headers
-#include "../../cwrappers/imgui/backends/imgui_impl_vulkan.h"
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_vulkan.h"
+
+#include <vulkan/vulkan.h>
+#include <GLFW/glfw3.h> // Will drag system OpenGL headers
+
 #include <cstdlib>
 #include <thread>
 #include <chrono>
 #include <iostream>
 #include <vector>
+#include <iterator>
+
+// #include "../../cwrappers/imgui/backends/imgui_impl_glfw.cpp"
+// #include "../../cwrappers/imgui/backends/imgui_impl_vulkan.cpp"
 
 
 // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to
@@ -29,7 +34,9 @@
 unsigned int glfw_target_fps = 30;
 int extra_frame_count = MAX_EXTRA_FRAME_COUNT;
 
-ImVec4 clear_color = *ImVec4_ImVec4_Float(0.45, 0.55, 0.6, 1.0);
+typedef void (*VoidCallback)(void);
+
+ImVec4 clear_color = ImVec4(0.45, 0.55, 0.6, 1.0);
 VkDevice current_device;
 VkDescriptorPool descriptor_pool;
 VkRenderPass render_pass;
@@ -40,8 +47,25 @@ std::vector<VkCommandBuffer> command_buffers;
 std::vector<VkImage> swapchain_images;
 std::vector<VkFence> fences;
 
-void glfw_render(GLFWwindow *window, int image_index, VoidCallback renderLoop);
+extern "C" {
 
+void glfw_render(GLFWwindow *window, int image_index);
+
+typedef int GLFWInitHint;
+typedef int GLFWWindowFlags;
+
+typedef struct CImage {
+    int width;
+    int height;
+    unsigned char* pixels;
+} CImage;
+
+
+
+void dropCallback(int, char **);
+void closeCallback(GLFWwindow *window);
+void keyCallback(int key, int scancode, int action, int mods);
+void sizeCallback(int width, int height);
 void igSetBgColor(ImVec4 color) { clear_color = color; }
 
 void igSetTargetFPS(unsigned int fps) { glfw_target_fps = fps; }
@@ -51,8 +75,8 @@ static void glfw_error_callback(int error, const char *description) {
 }
 
 void glfw_window_refresh_callback(GLFWwindow *window) {
-  VoidCallback loopFunc = (VoidCallback)(glfwGetWindowUserPointer(window));
-  glfw_render(window, loopFunc);
+  // VoidCallback loopFunc = (VoidCallback)(glfwGetWindowUserPointer(window));
+  // glfw_render(window, loopFunc);
 }
 
 int igInitGLFW() {
@@ -175,7 +199,8 @@ void igAttachToExistingWindow(GLFWwindow* window, VkInstance instance, VkDevice 
   VkQueue graphics_queue, VkPipelineCache pipeline_cache, uint32_t graphics_queue_family, VkImageView image_views[],
   VkImage swapchain_imgs[], VkFormat swapchain_format, uint32_t swapchain_image_count, int width, int height) {
   
-  igCreateContext(0);
+  
+  ImGui::CreateContext(); //igCreateContext(0);
   ImGui_ImplGlfw_InitForVulkan(window, true);
     
   int swapchain_img_count = sizeof(swapchain_images) / sizeof(VkImage);
@@ -211,7 +236,7 @@ void igAttachToExistingWindow(GLFWwindow* window, VkInstance instance, VkDevice 
     pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
     pool_info.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
     pool_info.maxSets = 1000;
-    pool_info.poolSizeCount = std::size(pool_sizes);
+    pool_info.poolSizeCount = 11;
     pool_info.pPoolSizes = pool_sizes;
 
 	vkCreateDescriptorPool(device, &pool_info, nullptr, &descriptor_pool);
@@ -286,12 +311,12 @@ GLFWwindow *igCreateGLFWWindow(const char *title, int width, int height,
   // glfwSetWindowRefreshCallback(window, glfw_window_refresh_callback);
   // glfwMakeContextCurrent(NULL);
   // return window;
-  return NULL;
+  return nullptr;
 }
 
 void igRefresh() { glfwPostEmptyEvent(); }
 
-void glfw_render(GLFWwindow *window, int image_index, VoidCallback renderLoop) {
+void glfw_render(GLFWwindow *window, int image_index) {
   VkCommandBuffer command_buffer = command_buffers[image_index];
   VkFence fence = fences[image_index];
 
@@ -311,11 +336,11 @@ void glfw_render(GLFWwindow *window, int image_index, VoidCallback renderLoop) {
   // Start the Dear ImGui frame
   ImGui_ImplVulkan_NewFrame();
   ImGui_ImplGlfw_NewFrame();
-  igNewFrame();
+  ImGui::NewFrame();//igNewFrame();
 
   // Rendering
-  igRender();
-  ImDrawData* draw_data = igGetDrawData();
+  ImGui::Render();//igRender();
+  ImDrawData* draw_data = ImGui::GetDrawData();//igGetDrawData();
 
   VkImageMemoryBarrier barrier1 = {};
     barrier1.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -369,8 +394,8 @@ void glfw_render(GLFWwindow *window, int image_index, VoidCallback renderLoop) {
 
 void igGLFWRunLoop(GLFWwindow *window, VoidCallback loop, VoidCallback beforeRender, VoidCallback afterRender,
                VoidCallback beforeDestroyContext) {
-  glfwMakeContextCurrent(window);
-  ImGuiIO *io = igGetIO_Nil();
+  // glfwMakeContextCurrent(window);
+  // ImGuiIO *io = igGetIO_Nil();
 
   // Load Fonts
   // - If no fonts are loaded, dear imgui will use the default font. You can
@@ -502,5 +527,4 @@ void igGLFWWindow_SetIcon(GLFWwindow *window, int count, CImage *images) {
 }
 
 void iggImplGlfw_KeyCallback(GLFWwindow* w, int k,int s,int a,int m) { ImGui_ImplGlfw_KeyCallback(w,k,s,a,m); }
-
-#endif
+}

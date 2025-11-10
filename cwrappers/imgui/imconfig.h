@@ -151,7 +151,16 @@ namespace ImGui
  * cimgui-go: https://github.com/AllenDang/cimgui-go
  * From: templates/assert.h
  */
-extern "C" void goImguiAssertHandler(char const *expression, char const *file, int line);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void goImguiAssertHandler(char const *expression, char const *file, int line);
+
+#ifdef __cplusplus
+}
+#endif
+
 #define IM_ASSERT(_EXPR)                                   \
    do                                                      \
    {                                                       \

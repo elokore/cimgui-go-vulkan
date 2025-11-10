@@ -1,13 +1,12 @@
 package glfwvulkanbackend
 
-// #cgo amd64,linux LDFLAGS: ${SRCDIR}/../../lib/linux/x64/libglfw3.a -ldl -lGL -lX11
-// #cgo amd64,windows LDFLAGS: -L${SRCDIR}/../../lib/windows/x64 -l:libglfw3.a -lgdi32 -lopengl32 -limm32
-// #cgo darwin LDFLAGS: -framework Cocoa -framework IOKit -framework CoreVideo
-// #cgo amd64,darwin LDFLAGS: ${SRCDIR}/../../lib/macos/x64/libglfw3.a
-// #cgo arm64,darwin LDFLAGS: ${SRCDIR}/../../lib/macos/arm64/libglfw3.a
+// #cgo CPPFLAGS: -DCIMGUI_GO_USE_GLFW
+// #cgo linux LDFLAGS: -lvulkan
+// #cgo windows LDFLAGS: -lvulkan-1
+// #cgo darwin LDFLAGS: -framework Vulkan -framework Metal -framework QuartzCore
 // #cgo !gles2,darwin LDFLAGS: -framework OpenGL
 // #cgo gles2,darwin LDFLAGS: -lGLESv2
-// #cgo CPPFLAGS: -DCIMGUI_GO_USE_GLFW
+//
 // #include <stdlib.h>
 // #include <stdint.h>
 // #include "glfw_vulkan_backend.h"
@@ -16,7 +15,6 @@ import "C"
 import (
 	"image"
 	"image/draw"
-	"reflect"
 	"unsafe"
 
 	"github.com/AllenDang/cimgui-go/backend"
@@ -390,25 +388,25 @@ func (b *GLFWVulkanBackend) AttachToExistingWindow(window *glfw.Window, instance
 	}
 
 	// C array of image views
-	imageViewsArray := (*unsafe.Pointer)(unsafe.Pointer(&cImageViews[0]))
-	swapchainImagesArray := (*unsafe.Pointer)(unsafe.Pointer(&cSwapchainImages[0]))
+	// imageViewsArray := (*unsafe.Pointer)(unsafe.Pointer(&cImageViews[0]))
+	// swapchainImagesArray := (*unsafe.Pointer)(unsafe.Pointer(&cSwapchainImages[0]))
 
 	// The actual C glfw window handle is hidden as a private member of glfw.Window, use reflection to retrieve it
-	v := reflect.ValueOf(window).Elem()
-	dataField := v.FieldByName("data")
-	cGlfwWindow := unsafe.Pointer(dataField.Pointer())
+	//v := reflect.ValueOf(window).Elem()
+	//dataField := v.FieldByName("data")
+	//cGlfwWindow := unsafe.Pointer(dataField.Pointer())
 
 	C.igAttachToExistingWindow(
-		cGlfwWindow,
-		unsafe.Pointer(instance),
-		unsafe.Pointer(device),
-		unsafe.Pointer(physical_device),
-		unsafe.Pointer(graphics_queue),
-		unsafe.Pointer(pipeline_cache),
+		(*C.GLFWwindow)(window.Handle()),
+		(C.VkInstance)(unsafe.Pointer(instance)),
+		(C.VkDevice)(unsafe.Pointer(device)),
+		(C.VkPhysicalDevice)(unsafe.Pointer(physical_device)),
+		(C.VkQueue)(unsafe.Pointer(graphics_queue)),
+		(C.VkPipelineCache)(unsafe.Pointer(pipeline_cache)),
 		C.uint32_t(graphics_queue_family),
-		imageViewsArray,
-		swapchainImagesArray,
-		C.uint32_t(swapchainFormat),
+		(*C.VkImageView)(unsafe.Pointer(&imageViews[0])),
+		(*C.VkImage)(unsafe.Pointer(&swapchainImages[0])),
+		C.VkFormat(swapchainFormat),
 		C.uint32_t(swapchainImageCount),
 		C.int(width),
 		C.int(height),
@@ -434,7 +432,7 @@ func (b *GLFWVulkanBackend) CreateTextureRgba(img *image.RGBA, width, height int
 }
 
 func (b *GLFWVulkanBackend) DeleteTexture(id imgui.TextureRef) {
-	C.igDeleteTexture(C.ImTextureID(id.TexID()))
+	C.igDeleteTexture(C.ImTextureID(unsafe.Pointer(uintptr(id.TexID()))))
 }
 
 // SetDropCallback sets the drop callback which is called when an object

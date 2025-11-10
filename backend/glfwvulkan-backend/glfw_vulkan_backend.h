@@ -1,13 +1,19 @@
 #pragma once
 
-#include "../../imgui/wrapper.h"
+#include <vulkan/vulkan.h>
 #include "../../thirdparty/glfw/include/GLFW/glfw3.h" // Will drag system OpenGL headers
-#include "../../cwrappers/imgui/backends/imgui_impl_vulkan.h"
-#include "../../imgui/extra_types.h"
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+typedef struct ImVec4 {
+        float x, y, z, w;
+} ImVec4;
+
+typedef void* ImTextureID;
+typedef void (*VoidCallback)(void);
 
 typedef int GLFWKey;
 enum GLFWKey_ {
@@ -191,7 +197,7 @@ struct GLFWimage;
 extern void igSetBgColor(ImVec4 color);
 extern void igSetTargetFPS(unsigned int fps);
 extern int igInitGLFW();
-void glfw_render(GLFWwindow *window, int image_index, VoidCallback renderLoop);
+void glfw_render(GLFWwindow *window, int image_index);
 extern GLFWwindow *igCreateGLFWWindow(const char *title, int width, int height,
                                       VoidCallback afterCreateContext);
 extern void igAttachToExistingWindow(GLFWwindow* window, VkInstance instance, VkDevice device, VkPhysicalDevice physical_device,
