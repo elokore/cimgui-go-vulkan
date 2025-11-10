@@ -49,6 +49,11 @@ CIMGUI_API void ImGui_ImplOpenGL2_DestroyDeviceObjects(void);
 CIMGUI_API void ImGui_ImplOpenGL2_UpdateTexture(ImTextureData* tex);
 
 #endif
+
+#ifdef CIMGUI_USE_VULKAN
+CIMGUI_API void ImGui_ImplVulkan_RenderDrawData(ImDrawData* draw_data, VkCommandBuffer command_buffer, VkPipeline pipeline = VK_NULL_HANDLE);
+#endif
+
 #ifdef CIMGUI_USE_SDL2
 #ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 

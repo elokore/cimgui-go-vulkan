@@ -25,6 +25,7 @@
 #include "cimgui_impl.h"
 
 #ifdef CIMGUI_USE_VULKAN
+#include "imgui_impl_vulkan.h"
 
 CIMGUI_API ImGui_ImplVulkanH_Window* ImGui_ImplVulkanH_Window_ImGui_ImplVulkanH_Window()
 {

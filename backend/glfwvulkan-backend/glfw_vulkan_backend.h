@@ -1,19 +1,21 @@
 #pragma once
 
 #include <vulkan/vulkan.h>
+#include "../../imgui/wrapper.h"
 #include "../../thirdparty/glfw/include/GLFW/glfw3.h" // Will drag system OpenGL headers
+#include "../../imgui/extra_types.h"
 #include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct ImVec4 {
-        float x, y, z, w;
-} ImVec4;
+// typedef struct ImVec4 {
+//         float x, y, z, w;
+// } ImVec4;
 
-typedef void* ImTextureID;
-typedef void (*VoidCallback)(void);
+// typedef void* ImTextureID;
+// typedef void (*VoidCallback)(void);
 
 typedef int GLFWKey;
 enum GLFWKey_ {

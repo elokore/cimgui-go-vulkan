@@ -2,9 +2,14 @@
 #define CIMGUI_USE_GLFW
 #define CIMGUI_USE_VULKAN
 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_vulkan.h"
+// #include "imgui.h"
+// #include "imgui_impl_glfw.h"
+// #include "imgui_impl_vulkan.h"
+#include "glfw_vulkan_backend.h"
+#include "../../cwrappers/cimgui.h"
+#include "../../cwrappers/cimgui_impl.h"
+#include "../../thirdparty/glfw/include/GLFW/glfw3.h" // Will drag system OpenGL headers
+
 
 #include <vulkan/vulkan.h>
 #include <GLFW/glfw3.h> // Will drag system OpenGL headers
@@ -34,7 +39,7 @@
 unsigned int glfw_target_fps = 30;
 int extra_frame_count = MAX_EXTRA_FRAME_COUNT;
 
-typedef void (*VoidCallback)(void);
+//typedef void (*VoidCallback)(void);
 
 ImVec4 clear_color = ImVec4(0.45, 0.55, 0.6, 1.0);
 VkDevice current_device;
@@ -49,16 +54,16 @@ std::vector<VkFence> fences;
 
 extern "C" {
 
-void glfw_render(GLFWwindow *window, int image_index);
+//void glfw_render(GLFWwindow *window, int image_index);
 
 typedef int GLFWInitHint;
 typedef int GLFWWindowFlags;
 
-typedef struct CImage {
-    int width;
-    int height;
-    unsigned char* pixels;
-} CImage;
+// typedef struct CImage {
+//     int width;
+//     int height;
+//     unsigned char* pixels;
+// } CImage;
 
 
 
