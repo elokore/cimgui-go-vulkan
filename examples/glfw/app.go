@@ -7,6 +7,8 @@ import (
 
 	as "github.com/vulkan-go/asche"
 
+	"github.com/AllenDang/cimgui-go/backend"
+	glfwvulkanbackend "github.com/AllenDang/cimgui-go/backend/glfwvulkan-backend"
 	"github.com/go-gl/glfw/v3.3/glfw"
 	vk "github.com/vulkan-go/vulkan"
 	"github.com/xlab/closer"
@@ -21,6 +23,7 @@ type Application struct {
 }
 
 var isDebugMode bool = false
+var currentBackend backend.Backend[glfwvulkanbackend.GLFWWindowFlags]
 
 func runApplication() error {
 	// Initialize GLFW and Vulkan
@@ -66,6 +69,19 @@ func runApplication() error {
 	}, nil, &pipeline_cache)
 
 	app.PipelineCache = pipeline_cache
+
+	currentBackend, _ = backend.CreateBackend(glfwvulkanbackend.NewGLFWBackend())
+	currentBackend.AttachToExistingWindow(
+		app.WindowHandle,
+		app.Context().Platform().Instance(),
+		app.Context().Device(),
+		app.Context().Platform().PhysicalDevice(),
+		app.Context().Platform().GraphicsQueue(),
+		app.PipelineCache,
+		app.Context().Platform().GraphicsQueueFamilyIndex(),
+		app.Context().SwapchainImageResources(),
+		app.VulkanSwapchainDimensions(),
+	)
 
 	println("Created")
 	// Start the main render loop

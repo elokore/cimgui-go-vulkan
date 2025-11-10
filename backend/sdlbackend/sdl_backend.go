@@ -25,6 +25,9 @@ import (
 	"github.com/AllenDang/cimgui-go/backend"
 	"github.com/AllenDang/cimgui-go/imgui"
 	"github.com/AllenDang/cimgui-go/internal"
+	"github.com/go-gl/glfw/v3.3/glfw"
+	as "github.com/vulkan-go/asche"
+	vk "github.com/vulkan-go/vulkan"
 )
 
 type voidCallbackFunc func()
@@ -266,6 +269,10 @@ func (b *SDLBackend) SetBeforeDestroyContextHook(hook func()) {
 
 func (b *SDLBackend) BeforeDestroyHook() func() {
 	return b.beforeDestroyContext
+}
+
+func (b *SDLBackend) AttachToExistingWindow(window *glfw.Window, instance vk.Instance, device vk.Device, physical_device vk.PhysicalDevice,
+	graphics_queue vk.Queue, pipeline_cache vk.PipelineCache, graphics_queue_family uint32, swapchainImageResources []*as.SwapchainImageResources, swapchainDimensions *as.SwapchainDimensions) {
 }
 
 func (b *SDLBackend) SetBeforeRenderHook(hook func()) {

@@ -201,6 +201,19 @@ void igAttachToExistingWindow(GLFWwindow* window, VkInstance instance, VkDevice 
   
   
   ImGui::CreateContext(); //igCreateContext(0);
+  
+  ImGuiIO *io = &ImGui::GetIO();//igGetIO_Nil();
+  io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+  // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad
+  // Controls
+  io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;   // Enable Docking
+  io->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // Enable Multi-Viewport
+                                                        // / Platform Windows
+  // io.ConfigViewportsNoAutoMerge = true;
+  // io.ConfigViewportsNoTaskBarIcon = true;
+
+  io->IniFilename = "";
+
   ImGui_ImplGlfw_InitForVulkan(window, true);
     
   int swapchain_img_count = sizeof(swapchain_images) / sizeof(VkImage);

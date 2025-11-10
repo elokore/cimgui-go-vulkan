@@ -8,6 +8,7 @@ require (
 	github.com/ebitengine/gomobile v0.0.0-20250923094054-ea854a63cce1 // indirect
 	github.com/ebitengine/hideconsole v1.0.0 // indirect
 	github.com/ebitengine/purego v0.9.0 // indirect
+	github.com/go-gl/glfw v0.0.0-20250301202403-da16c1255728 // indirect
 	github.com/go-gl/glfw/v3.3/glfw v0.0.0-20250301202403-da16c1255728 // indirect
 	github.com/jezek/xgb v1.1.1 // indirect
 	github.com/vulkan-go/asche v0.0.0-20190912134304-d4b318b67e07 // indirect

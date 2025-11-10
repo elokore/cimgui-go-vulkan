@@ -7,7 +7,10 @@ import (
 
 	"github.com/AllenDang/cimgui-go/backend"
 	"github.com/AllenDang/cimgui-go/imgui"
+	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/hajimehoshi/ebiten/v2"
+	as "github.com/vulkan-go/asche"
+	vk "github.com/vulkan-go/vulkan"
 )
 
 func (b *EbitenBackend) SetAfterCreateContextHook(fn func()) {
@@ -85,6 +88,10 @@ func (b *EbitenBackend) SetWindowSize(width, height int) {
 		b.width = float32(width)
 		b.height = float32(height)
 	*/
+}
+
+func (b *EbitenBackend) AttachToExistingWindow(window *glfw.Window, instance vk.Instance, device vk.Device, physical_device vk.PhysicalDevice,
+	graphics_queue vk.Queue, pipeline_cache vk.PipelineCache, graphics_queue_family uint32, swapchainImageResources []*as.SwapchainImageResources, swapchainDimensions *as.SwapchainDimensions) {
 }
 
 func (b *EbitenBackend) SetWindowSizeLimits(minWidth, minHeight, maxWidth, maxHeight int) {
