@@ -51,7 +51,66 @@ CIMGUI_API void ImGui_ImplOpenGL2_UpdateTexture(ImTextureData* tex);
 #endif
 
 #ifdef CIMGUI_USE_VULKAN
+#ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+struct ImGui_ImplVulkan_PipelineInfo
+{
+    // For Main viewport only
+    VkRenderPass                    RenderPass;                     // Ignored if using dynamic rendering
+
+    // For Main and Secondary viewports
+    uint32_t                        Subpass;                        //
+    VkSampleCountFlagBits           MSAASamples = {};               // 0 defaults to VK_SAMPLE_COUNT_1_BIT
+#ifdef IMGUI_IMPL_VULKAN_HAS_DYNAMIC_RENDERING
+    VkPipelineRenderingCreateInfoKHR PipelineRenderingCreateInfo;   // Optional, valid if .sType == VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO_KHR
+#endif
+
+    // For Secondary viewports only (created/managed by backend)
+    VkImageUsageFlags               SwapChainImageUsage;            // Extra flags for vkCreateSwapchainKHR() calls for secondary viewports. We automatically add VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT. You can add e.g. VK_IMAGE_USAGE_TRANSFER_SRC_BIT if you need to capture from viewports.
+};
+
+struct ImGui_ImplVulkan_InitInfo
+{
+    uint32_t                        ApiVersion;                 // Fill with API version of Instance, e.g. VK_API_VERSION_1_3 or your value of VkApplicationInfo::apiVersion. May be lower than header version (VK_HEADER_VERSION_COMPLETE)
+    VkInstance                      Instance;
+    VkPhysicalDevice                PhysicalDevice;
+    VkDevice                        Device;
+    uint32_t                        QueueFamily;
+    VkQueue                         Queue;
+    VkDescriptorPool                DescriptorPool;             // See requirements in note above; ignored if using DescriptorPoolSize > 0
+    uint32_t                        DescriptorPoolSize;         // Optional: set to create internal descriptor pool automatically instead of using DescriptorPool.
+    uint32_t                        MinImageCount;              // >= 2
+    uint32_t                        ImageCount;                 // >= MinImageCount
+    VkPipelineCache                 PipelineCache;              // Optional
+
+    // Pipeline
+    ImGui_ImplVulkan_PipelineInfo   PipelineInfoMain;           // Infos for Main Viewport (created by app/user)
+    ImGui_ImplVulkan_PipelineInfo   PipelineInfoForViewports;   // Infos for Secondary Viewports (created by backend)
+    //VkRenderPass                  RenderPass;                 // --> Since 2025/09/26: set 'PipelineInfoMain.RenderPass' instead
+    //uint32_t                      Subpass;                    // --> Since 2025/09/26: set 'PipelineInfoMain.Subpass' instead
+    //VkSampleCountFlagBits         MSAASamples;                // --> Since 2025/09/26: set 'PipelineInfoMain.MSAASamples' instead
+    //VkPipelineRenderingCreateInfoKHR PipelineRenderingCreateInfo; // Since 2025/09/26: set 'PipelineInfoMain.PipelineRenderingCreateInfo' instead
+
+    // (Optional) Dynamic Rendering
+    // Need to explicitly enable VK_KHR_dynamic_rendering extension to use this, even for Vulkan 1.3 + setup PipelineInfoMain.PipelineRenderingCreateInfo and PipelineInfoViewports.PipelineRenderingCreateInfo.
+    bool                            UseDynamicRendering;
+
+    // (Optional) Allocation, Debugging
+    const VkAllocationCallbacks*    Allocator;
+    void                            (*CheckVkResultFn)(VkResult err);
+    VkDeviceSize                    MinAllocationSize;          // Minimum allocation size. Set to 1024*1024 to satisfy zealous best practices validation layer and waste a little memory.
+
+    // (Optional) Customize default vertex/fragment shaders.
+    // - if .sType == VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO we use specified structs, otherwise we use defaults.
+    // - Shader inputs/outputs need to match ours. Code/data pointed to by the structure needs to survive for whole during of backend usage.
+    VkShaderModuleCreateInfo        CustomShaderVertCreateInfo;
+    VkShaderModuleCreateInfo        CustomShaderFragCreateInfo;
+};
+#endif
+CIMGUI_API bool ImGui_ImplVulkan_Init(ImGui_ImplVulkan_InitInfo* info);
+CIMGUI_API void ImGui_ImplVulkan_Shutdown();
+CIMGUI_API void ImGui_ImplVulkan_NewFrame();
 CIMGUI_API void ImGui_ImplVulkan_RenderDrawData(ImDrawData* draw_data, VkCommandBuffer command_buffer, VkPipeline pipeline = VK_NULL_HANDLE);
+CIMGUI_API void ImGui_ImplVulkan_SetMinImageCount(uint32_t min_image_count);
 #endif
 
 #ifdef CIMGUI_USE_SDL2

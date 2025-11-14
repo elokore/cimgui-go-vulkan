@@ -8,11 +8,6 @@
 #include "glfw_vulkan_backend.h"
 #include "../../cwrappers/cimgui.h"
 #include "../../cwrappers/cimgui_impl.h"
-#include "../../thirdparty/glfw/include/GLFW/glfw3.h" // Will drag system OpenGL headers
-
-
-#include <vulkan/vulkan.h>
-#include <GLFW/glfw3.h> // Will drag system OpenGL headers
 
 #include <cstdlib>
 #include <thread>
@@ -22,7 +17,7 @@
 #include <iterator>
 
 // #include "../../cwrappers/imgui/backends/imgui_impl_glfw.cpp"
-// #include "../../cwrappers/imgui/backends/imgui_impl_vulkan.cpp"
+//#include "../../cwrappers/imgui/backends/imgui_impl_vulkan.cpp"
 
 
 // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to
@@ -41,7 +36,7 @@ int extra_frame_count = MAX_EXTRA_FRAME_COUNT;
 
 //typedef void (*VoidCallback)(void);
 
-ImVec4 clear_color = ImVec4(0.45, 0.55, 0.6, 1.0);
+ImVec4 clear_color = *ImVec4_ImVec4_Float(0.45, 0.55, 0.6, 1.0);
 VkDevice current_device;
 VkDescriptorPool descriptor_pool;
 VkRenderPass render_pass;
@@ -205,9 +200,9 @@ void igAttachToExistingWindow(GLFWwindow* window, VkInstance instance, VkDevice 
   VkImage swapchain_imgs[], VkFormat swapchain_format, uint32_t swapchain_image_count, int width, int height) {
   
   
-  ImGui::CreateContext(); //igCreateContext(0);
+  igCreateContext(0);
   
-  ImGuiIO *io = &ImGui::GetIO();//igGetIO_Nil();
+  ImGuiIO *io = igGetIO_Nil();
   io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
   // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad
   // Controls
@@ -354,11 +349,11 @@ void glfw_render(GLFWwindow *window, int image_index) {
   // Start the Dear ImGui frame
   ImGui_ImplVulkan_NewFrame();
   ImGui_ImplGlfw_NewFrame();
-  ImGui::NewFrame();//igNewFrame();
+  igNewFrame();
 
   // Rendering
-  ImGui::Render();//igRender();
-  ImDrawData* draw_data = ImGui::GetDrawData();//igGetDrawData();
+  igRender();
+  ImDrawData* draw_data = igGetDrawData();
 
   VkImageMemoryBarrier barrier1 = {};
     barrier1.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;

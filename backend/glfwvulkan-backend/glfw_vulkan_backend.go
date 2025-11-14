@@ -1,7 +1,7 @@
 package glfwvulkanbackend
 
 // #cgo CPPFLAGS: -DCIMGUI_GO_USE_GLFW
-// #cgo linux LDFLAGS: -lvulkan -lglfw
+// #cgo amd64,linux LDFLAGS: -lvulkan -lglfw
 // #cgo windows LDFLAGS: -lvulkan-1
 // #cgo darwin LDFLAGS: -framework Vulkan -framework Metal -framework QuartzCore
 // #cgo !gles2,darwin LDFLAGS: -framework OpenGL
@@ -432,7 +432,7 @@ func (b *GLFWVulkanBackend) CreateTextureRgba(img *image.RGBA, width, height int
 }
 
 func (b *GLFWVulkanBackend) DeleteTexture(id imgui.TextureRef) {
-	C.igDeleteTexture(C.ImTextureID(unsafe.Pointer(uintptr(id.TexID()))))
+	// C.igDeleteTexture(C.ImTextureID(unsafe.Pointer(uintptr(id.TexID()))))
 }
 
 // SetDropCallback sets the drop callback which is called when an object
