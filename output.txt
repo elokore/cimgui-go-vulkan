@@ -1,4 +1,4 @@
-# github.com/elokore/glfw/v3.4/glfw
+# github.com/go-gl/glfw/v3.4/glfw
 In file included from ../../go/pkg/mod/github.com/!geo25rey/glfw/v3.4/glfw@v0.0.0-20240506152258-7c42c6194dae/c_glfw_lin.go:10:
 ../../go/pkg/mod/github.com/!geo25rey/glfw/v3.4/glfw@v0.0.0-20240506152258-7c42c6194dae/glfw/src/posix_poll.c:27: warning: "_GNU_SOURCE" redefined
    27 | #define _GNU_SOURCE

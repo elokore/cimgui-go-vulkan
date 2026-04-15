@@ -25,7 +25,7 @@ import (
 	"github.com/elokore/cimgui-go-vulkan/backend"
 	"github.com/elokore/cimgui-go-vulkan/imgui"
 	"github.com/elokore/cimgui-go-vulkan/internal"
-	"github.com/elokore/glfw/v3.4/glfw"
+	"github.com/go-gl/glfw/v3.4/glfw"
 	as "github.com/vulkan-go/asche"
 	vk "github.com/vulkan-go/vulkan"
 )

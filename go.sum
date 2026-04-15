@@ -4,8 +4,6 @@ github.com/ebitengine/hideconsole v1.0.0 h1:5J4U0kXF+pv/DhiXt5/lTz0eO5ogJ1iXb8Yj
 github.com/ebitengine/hideconsole v1.0.0/go.mod h1:hTTBTvVYWKBuxPr7peweneWdkUwEuHuB3C1R/ielR1A=
 github.com/ebitengine/purego v0.9.0 h1:mh0zpKBIXDceC63hpvPuGLiJ8ZAa3DfrFTudmfi8A4k=
 github.com/ebitengine/purego v0.9.0/go.mod h1:iIjxzd6CiRiOG0UyXP+V1+jWqUXVjPKLAI0mRfJZTmQ=
-github.com/elokore/glfw/v3.4/glfw v0.0.0-20251221223859-210c96574f64 h1:7T1S3tnadGtlfgrNz4BUUgAsuGDoOmlX9jvD+aDHDas=
-github.com/elokore/glfw/v3.4/glfw v0.0.0-20251221223859-210c96574f64/go.mod h1:uDdZ02tbI9khxEJbHKBCgnCgbe6Wxjjf5oG9eQjvFRw=
 github.com/elokore/glfw/v3.4/glfw v0.0.0-20251221231958-c1dc85df2170 h1:8erI7Buk8dSAVxBmQxiTnJDESbIoEesxEN8ZzjZcOE0=
 github.com/elokore/glfw/v3.4/glfw v0.0.0-20251221231958-c1dc85df2170/go.mod h1:uDdZ02tbI9khxEJbHKBCgnCgbe6Wxjjf5oG9eQjvFRw=
 github.com/hajimehoshi/ebiten/v2 v2.9.2 h1:fV9Wh8dL4gSV62s/oygCIckEJ2MPpJRaUiwj6GR4Uos=
